@@ -1,0 +1,14 @@
+{
+  "app": {
+    "title": "<span class='thin'>Poll</span>Star"
+  },
+  "home": {
+    "panel": {
+      "teaser": "Doing polls easy, fast and near real-time. You can create and control a session, or join an existing session and cast votes. Where do you want to go next?"
+    }
+  },
+  "button": {
+    "create-session": "Create a session",
+    "join-session": "Join a session"
+  }
+}

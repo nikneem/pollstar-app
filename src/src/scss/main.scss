@@ -1,0 +1,24 @@
+@import "./variables.scss";
+html,
+body {
+  height: 100%;
+  background-color: $background;
+  color: $foreground;
+}
+body {
+  margin: 0;
+  font-family: "Quicksand", sans-serif;
+}
+
+.thin {
+  font-weight: 300;
+}
+
+h1.app-title {
+  font-weight: 600;
+  line-height: 4rem;
+  .thin {
+    font-weight: 300;
+    color: $bright;
+  }
+}

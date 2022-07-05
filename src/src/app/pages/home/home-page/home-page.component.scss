@@ -1,0 +1,61 @@
+@import "../../../../scss/variables.scss";
+
+.home-page {
+  width: 100vw;
+  height: 100vh;
+  background-image: url(/assets/background.jpg);
+  background-size: cover;
+  background-position: bottom;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  .page-panel {
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: rgba(#000, 0.5);
+    .panel {
+      h1 {
+        font-size: 4rem;
+        color: $foreground-darker;
+        .thin {
+          font-weight: 300;
+          color: $bright;
+        }
+      }
+      .actions {
+        display: flex;
+        flex-flow: row;
+        gap: 1rem;
+        justify-content: flex-end;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 540px) {
+}
+
+@media only screen and (min-width: 540px) and (max-width: 900px) {
+  .home-page {
+    .page-panel {
+      width: 70%;
+    }
+  }
+}
+@media only screen and (min-width: 900px) and (max-width: 1200px) {
+  .home-page {
+    .page-panel {
+      width: 50%;
+    }
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .home-page {
+    .page-panel {
+      width: 30%;
+    }
+  }
+}

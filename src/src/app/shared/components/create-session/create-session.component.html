@@ -1,0 +1,30 @@
+<h2 mat-dialog-title translate="session.create.dialog.title"></h2>
+<mat-dialog-content>
+  <p translate="session.create.dialog.text"></p>
+  <form [formGroup]="createSessionForm" novalidate>
+    <input type="hidden" formControlName="userId" />
+    <mat-form-field class="full-width" appearance="fill" color="accent">
+      <mat-label translate="session.create.dialog.name"></mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field class="full-width" appearance="fill" color="accent">
+      <mat-label translate="session.create.dialog.description"></mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    color="primary"
+    [mat-dialog-close]="false"
+    translate="button.cancel"
+  ></button>
+  <button
+    mat-flat-button
+    color="accent"
+    translate="button.ok"
+    [disabled]="createSessionForm.pristine || !createSessionForm.valid"
+    (click)="createSession()"
+  ></button>
+</mat-dialog-actions>

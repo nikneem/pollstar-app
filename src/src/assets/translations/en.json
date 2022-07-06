@@ -7,7 +7,20 @@
       "teaser": "Doing polls easy, fast and near real-time. You can create and control a session, or join an existing session and cast votes. Where do you want to go next?"
     }
   },
+  "session": {
+    "create": {
+      "dialog": {
+        "title": "Create a new session",
+        "text": "Give your session a name and maybe a nice description",
+        "name": "Session name",
+        "description": "Description"
+      }
+    }
+  },
   "button": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
     "create-session": "Create a session",
     "join-session": "Join a session"
   }

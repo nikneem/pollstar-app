@@ -1,0 +1,26 @@
+.mat-sidenav-container {
+  height: calc(100vh - 64px);
+  .mat-sidenav {
+    width: 64px;
+    padding: 1rem;
+  }
+  .mat-sidenav-content {
+    padding: 1rem;
+  }
+}
+
+@media only screen and (min-width: 540px) {
+}
+
+@media only screen and (min-width: 540px) and (max-width: 900px) {
+}
+@media only screen and (min-width: 900px) and (max-width: 1200px) {
+}
+
+@media only screen and (min-width: 1200px) {
+  .mat-sidenav-container {
+    .mat-sidenav {
+      width: 256px;
+    }
+  }
+}

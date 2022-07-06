@@ -22,3 +22,17 @@ h1.app-title {
     color: $bright;
   }
 }
+
+.full-width {
+  width: 100%;
+}
+
+.mat-dialog-container {
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
+}
+
+.spacer {
+  flex: 1 1 auto;
+}

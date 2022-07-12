@@ -29,13 +29,25 @@ jobs:
 
       - name: Build versioned test image
         working-directory: src
-        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-api-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
+        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-app-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
       - name: Build latest test image
         working-directory: src
-        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-api-test:latest
+        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-app-test:latest
       - name: Build versioned prod image
         working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-api-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
+        run: docker build . --file Dockerfile --tag nikneem/pollstar-app:${{ steps.gitversion.outputs.MajorMinorPatch }}
       - name: Build latest prod image
         working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-api-test:latest
+        run: docker build . --file Dockerfile --tag nikneem/pollstar-app:latest
+
+      - name: Login to docker hub
+        run: docker login -u nikneem -p ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Push versioned image to docker
+        run: docker push nikneem/pollstar-app-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
+      - name: Push latest image to docker
+        run: docker push nikneem/pollstar-app-test:latest
+      - name: Push versioned image to docker
+        run: docker push nikneem/pollstar-app:${{ steps.gitversion.outputs.MajorMinorPatch }}
+      - name: Push latest image to docker
+        run: docker push nikneem/pollstar-app:latest

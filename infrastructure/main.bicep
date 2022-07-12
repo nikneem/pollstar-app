@@ -24,7 +24,7 @@ module resourcesModule 'resources.bicep' = {
   name: 'ResourceModule'
   scope: appResourceGroup
   params: {
-    defaultResourceName: toLower('${systemName}-api-${environmentName}-${locationAbbreviation}')
+    defaultResourceName: toLower('${systemName}-app-${environmentName}-${locationAbbreviation}')
     location: location
     environmentName: environmentName
     containerVersion: containerVersion

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
+  IPollsListItemDto,
   ISessionCreateDto,
   ISessionDetailsDto,
 } from '../state/session/session-models';
@@ -23,5 +24,9 @@ export class SessionsService {
   ): Observable<ISessionDetailsDto> {
     const url = `${environment.backendUrl}/api/sessions/${sessionId}?userId=${userId}`;
     return this.http.get<ISessionDetailsDto>(url);
+  }
+  public getPolls(sessionId: string): Observable<Array<IPollsListItemDto>> {
+    const url = `${environment.backendUrl}/api/sessions/${sessionId}/polls`;
+    return this.http.get<Array<IPollsListItemDto>>(url);
   }
 }

@@ -36,3 +36,11 @@ h1.app-title {
 .spacer {
   flex: 1 1 auto;
 }
+a {
+  color: $foreground;
+  text-decoration: none;
+}
+a:hover {
+  color: $bright;
+  text-decoration: none;
+}

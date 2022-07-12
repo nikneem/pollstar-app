@@ -1,0 +1,83 @@
+<h2 mat-dialog-title translate="session.manage.poll.title"></h2>
+<mat-dialog-content>
+  <p translate="session.manage.poll.title"></p>
+  <form [formGroup]="pollDetailsForm" novalidate>
+    <input type="hidden" formControlName="id" />
+    <input type="hidden" formControlName="sessionId" />
+    <mat-form-field class="full-width" appearance="fill" color="accent">
+      <mat-label translate="session.create.dialog.name"></mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    <mat-form-field class="full-width" appearance="fill" color="accent">
+      <mat-label translate="session.create.dialog.description"></mat-label>
+      <input matInput formControlName="description" />
+    </mat-form-field>
+
+    <ng-container formArrayName="options">
+      <div class="options-list">
+        <div class="option" *ngFor="let option of options.controls; index as i">
+          <ng-container [formGroupName]="i">
+            <h4>Option {{ i + 1 }}</h4>
+            <div class="option-content">
+              <div class="option-fields">
+                <input type="hidden" formControlName="id" />
+                <mat-form-field
+                  appearance="fill"
+                  color="accent"
+                  [style.fontSize.px]="'10'"
+                >
+                  <mat-label translate="session.manage.poll.name"></mat-label>
+                  <input matInput formControlName="name" />
+                </mat-form-field>
+                <mat-form-field
+                  appearance="fill"
+                  color="accent"
+                  [style.fontSize.px]="'10'"
+                >
+                  <mat-label translate="session.manage.poll.description">
+                  </mat-label>
+                  <input matInput formControlName="description" />
+                </mat-form-field>
+              </div>
+              <div class="option-controls">
+                <button
+                  mat-fab
+                  color="primary"
+                  aria-label="Example icon button with a delete icon"
+                  (click)="removeSkill(i)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div class="option add">
+          <button
+            mat-fab
+            color="primary"
+            aria-label="Example icon button with a delete icon"
+            (click)="addOption()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    color="primary"
+    [mat-dialog-close]="false"
+    translate="button.cancel"
+  ></button>
+  <button
+    mat-flat-button
+    color="accent"
+    translate="button.ok"
+    [disabled]="pollDetailsForm.pristine || !pollDetailsForm.valid"
+    (click)="save()"
+  ></button>
+</mat-dialog-actions>

@@ -1,7 +1,8 @@
-import { ISessionDetailsDto } from './session-models';
+import { IPollsListItemDto, ISessionDetailsDto } from './session-models';
 
 export interface ISessionState {
   activeSession?: ISessionDetailsDto;
+  sessionPolls?: Array<IPollsListItemDto>;
   isRefreshing: boolean;
 }
 

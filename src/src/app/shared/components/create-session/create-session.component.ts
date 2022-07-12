@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { IAppState } from 'src/app/state/app-state';
 import {
   sessionCreate,
-  sessionCreateSuccess,
+  sessionDetailsChanged,
 } from 'src/app/state/session/session-actions';
 import { ISessionCreateDto } from 'src/app/state/session/session-models';
 import { userIdentify } from 'src/app/state/user/user-actions';
@@ -67,7 +67,7 @@ export class CreateSessionComponent implements OnInit, OnDestroy {
       .subscribe((val) => {
         this.updateUserId(val.userId);
       });
-    this._actions$.pipe(ofType(sessionCreateSuccess)).subscribe((session) => {
+    this._actions$.pipe(ofType(sessionDetailsChanged)).subscribe((session) => {
       this.router.navigate([`/sessions/manage/${session.dto.id}`]);
       this.dialogRef.close();
     });

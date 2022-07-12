@@ -1,1 +1,24 @@
-<p>session-manage works!</p>
+<mat-toolbar *ngIf="activeSession">
+  {{ activeSession.name }}
+  <span *ngIf="selectedPoll"> &gt; {{ selectedPoll.name }} </span>
+</mat-toolbar>
+
+<div class="selected-poll" *ngIf="selectedPoll"></div>
+
+<!-- If not the owner -->
+<div class="" *ngIf="activeSession">
+  <div class="" *ngIf="!activeSession.isOwner">
+    <mat-card>
+      <mat-card-title
+        translate="session.manage.disabled.title"
+      ></mat-card-title>
+      <mat-card-content
+        translate="session.manage.disabled.text"
+      ></mat-card-content>
+      <a
+        [routerLink]="['/sessions/attend/:id', sessionId]"
+        translate="session.manage.disabled.attend"
+      ></a>
+    </mat-card>
+  </div>
+</div>

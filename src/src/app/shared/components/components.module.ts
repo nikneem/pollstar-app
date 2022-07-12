@@ -4,9 +4,13 @@ import { CreateSessionComponent } from './create-session/create-session.componen
 import { MaterialModule } from '../material/material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PollsListComponent } from './polls-list/polls-list.component';
+import { PollListTileComponent } from './poll-list-tile/poll-list-tile.component';
+import { PollsDetailsDialogComponent } from './polls-details-dialog/polls-details-dialog.component';
 
 @NgModule({
-  declarations: [CreateSessionComponent],
+  declarations: [CreateSessionComponent, PollsListComponent, PollListTileComponent, PollsDetailsDialogComponent],
   imports: [CommonModule, TranslateModule, ReactiveFormsModule, MaterialModule],
+  exports: [PollsListComponent],
 })
 export class ComponentsModule {}

@@ -3,7 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAppState } from 'src/app/state/app-state';
+import { IPollDto } from 'src/app/state/polls/polls-models';
 import { sessionGet } from 'src/app/state/session/session-actions';
+import { ISessionDetailsDto } from 'src/app/state/session/session-models';
 
 @Component({
   selector: 'app-session-manage',
@@ -13,9 +15,12 @@ import { sessionGet } from 'src/app/state/session/session-actions';
 export class SessionManageComponent implements OnInit, OnDestroy {
   private sessionIdSubsciption?: Subscription;
   private userIdSubscription?: Subscription;
+  private sessionSubscription?: Subscription;
 
   private userId?: string;
-  private sessionId?: string;
+  public sessionId?: string;
+  public activeSession?: ISessionDetailsDto;
+  public selectedPoll?: IPollDto;
 
   constructor(private route: ActivatedRoute, private store: Store<IAppState>) {}
 
@@ -28,8 +33,12 @@ export class SessionManageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.sessionSubscription = this.store
+      .select((x) => x.sessionState)
+      .subscribe((val) => {
+        this.activeSession = val.activeSession;
+      });
     this.sessionIdSubsciption = this.route.params.subscribe((params) => {
-      debugger;
       this.sessionId = params['id'];
       this.loadSessionDetails();
     });
@@ -41,6 +50,9 @@ export class SessionManageComponent implements OnInit, OnDestroy {
       });
   }
   ngOnDestroy(): void {
+    if (this.sessionSubscription) {
+      this.sessionSubscription.unsubscribe();
+    }
     if (this.sessionIdSubsciption) {
       this.sessionIdSubsciption.unsubscribe();
     }

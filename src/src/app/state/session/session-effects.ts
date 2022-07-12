@@ -6,7 +6,10 @@ import { SessionsService } from 'src/app/services/sessions.service';
 import {
   sessionCreate,
   sessionCreateFailed,
-  sessionCreateSuccess,
+  sessionDetailsChanged,
+  sessionGet,
+  sessionGetPollsList,
+  sessionPollsListChanged,
 } from './session-actions';
 
 @Injectable()
@@ -16,13 +19,40 @@ export class SessionEffects {
     private sessionsService: SessionsService
   ) {}
 
-  tableGetActiveRoundEffect$ = createEffect(() =>
+  sessionCreateEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(sessionCreate),
       mergeMap((act) =>
         this.sessionsService.post(act.dto).pipe(
-          map((dto) => sessionCreateSuccess({ dto: dto })),
-          tap((v) => {console.log(v)}),
+          map((dto) => sessionDetailsChanged({ dto: dto })),
+          catchError(() => {
+            return of(sessionCreateFailed());
+          })
+        )
+      )
+    )
+  );
+
+  sessionGetEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sessionGet),
+      mergeMap((act) =>
+        this.sessionsService.get(act.sessionId, act.userId).pipe(
+          map((dto) => sessionDetailsChanged({ dto: dto })),
+          catchError(() => {
+            return of(sessionCreateFailed());
+          })
+        )
+      )
+    )
+  );
+
+  sessionGetPollsListEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(sessionGetPollsList),
+      mergeMap((act) =>
+        this.sessionsService.getPolls(act.sessionId).pipe(
+          map((dto) => sessionPollsListChanged({ polls: dto })),
           catchError(() => {
             return of(sessionCreateFailed());
           })

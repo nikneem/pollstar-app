@@ -1,0 +1,27 @@
+<div class="polls-list" *ngIf="sessionPolls">
+  <div class="poll-list-item empty-state" *ngIf="sessionPolls.length === 0">
+    <span translate="session.manage.polls.empty-state"></span>
+    <button
+      mat-fab
+      color="primary"
+      aria-label="Example icon button with a delete icon"
+      (click)="addPoll()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <app-poll-list-tile
+    [poll]="poll"
+    *ngFor="let poll of sessionPolls"
+  ></app-poll-list-tile>
+  <div class="empty-state" *ngIf="sessionPolls.length > 0">
+    <button
+      mat-fab
+      color="primary"
+      aria-label="Example icon button with a delete icon"
+      (click)="addPoll()"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

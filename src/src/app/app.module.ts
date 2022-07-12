@@ -17,6 +17,7 @@ import { INITIAL_APP_STATE, reducers } from './state/app-state';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SessionEffects } from './state/session/session-effects';
 import { SessionsModule } from './pages/sessions/sessions.module';
+import { PollsEffects } from './state/polls/polls-effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/translations/', '.json');
@@ -43,7 +44,7 @@ let metaReducers: any[] = [];
       metaReducers,
       initialState: INITIAL_APP_STATE,
     }),
-    EffectsModule.forRoot([UserEffects, SessionEffects]),
+    EffectsModule.forRoot([UserEffects, SessionEffects, PollsEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,

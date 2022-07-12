@@ -18,42 +18,24 @@ jobs:
         run: |
           npm i
           npm i @angular/cli -g
+      - name: Compile Angular app with Test config
+        working-directory: src
+        run: |
+          ng build --configuration test --output-path ./test-published
       - name: Compile Angular app with Prod config
         working-directory: src
         run: |
           ng build --configuration production --output-path ./prod-published
-      - name: Publish Prod Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: prod-app
-          path: src/prod-published/
 
-  infrastructure-incremental-dev:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
-        with:
-          versionSpec: "5.x"
-      - name: Determine Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
-        with:
-          useConfigFile: true
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: prod-app
-          path: ./src/app
-
-      - name: Build versioned image
+      - name: Build versioned test image
         working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-api:${{ steps.gitversion.outputs.MajorMinorPatch }}
-      - name: Build latest image
+        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-api-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
+      - name: Build latest test image
         working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-api:latest
+        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-api-test:latest
+      - name: Build versioned prod image
+        working-directory: src
+        run: docker build . --file Dockerfile --tag nikneem/pollstar-api-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
+      - name: Build latest prod image
+        working-directory: src
+        run: docker build . --file Dockerfile --tag nikneem/pollstar-api-test:latest

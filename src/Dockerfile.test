@@ -9,4 +9,4 @@
 
 FROM nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY /prod-published /usr/share/nginx/html
+COPY /test-published /usr/share/nginx/html

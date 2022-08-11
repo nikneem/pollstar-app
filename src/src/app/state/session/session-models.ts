@@ -4,6 +4,11 @@ export interface ISessionCreateDto {
   description: string;
 }
 
+export interface ISessionJoinDto {
+  userId: string;
+  code: string;
+}
+
 export interface ISessionDetailsDto {
   id: string;
   code: string;

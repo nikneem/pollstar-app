@@ -9,6 +9,8 @@ import {
   sessionDetailsChanged,
   sessionGet,
   sessionGetPollsList,
+  sessionJoin,
+  sessionJoinFailed,
   sessionPollsListChanged,
 } from './session-actions';
 
@@ -32,6 +34,20 @@ export class SessionEffects {
       )
     )
   );
+
+  sessionJoinEffect$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(sessionJoin),
+    mergeMap((act) =>
+      this.sessionsService.join(act.dto.code, act.dto.userId).pipe(
+        map((dto) => sessionDetailsChanged({ dto: dto })),
+        catchError(() => {
+          return of(sessionJoinFailed());
+        })
+      )
+    )
+  )
+);
 
   sessionGetEffect$ = createEffect(() =>
     this.actions$.pipe(

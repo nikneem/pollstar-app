@@ -18,6 +18,13 @@ export class SessionsService {
     const url = `${environment.backendUrl}/api/sessions`;
     return this.http.post<ISessionDetailsDto>(url, dto);
   }
+  public join(
+    code: string,
+    userId: string
+  ): Observable<ISessionDetailsDto> {
+    const url = `${environment.backendUrl}/api/sessions/${code}/details?userId=${userId}`;
+    return this.http.get<ISessionDetailsDto>(url);
+  }
   public get(
     sessionId: string,
     userId: string

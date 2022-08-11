@@ -3,6 +3,7 @@ import {
   IPollsListItemDto,
   ISessionCreateDto,
   ISessionDetailsDto,
+  ISessionJoinDto,
 } from './session-models';
 
 export const sessionCreate = createAction(
@@ -10,6 +11,12 @@ export const sessionCreate = createAction(
   props<{ dto: ISessionCreateDto }>()
 );
 export const sessionCreateFailed = createAction('[Session] Create Failed');
+
+export const sessionJoin = createAction(
+  '[Session] Join',
+  props<{ dto: ISessionJoinDto }>()
+);
+export const sessionJoinFailed = createAction('[Session] Create Failed');
 
 export const sessionGet = createAction(
   '[Session] Get',

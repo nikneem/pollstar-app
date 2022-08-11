@@ -17,6 +17,10 @@ resource containerAppEnvironments 'Microsoft.App/managedEnvironments@2022-03-01'
   name: containerAppEnvironmentResourceName
   scope: resourceGroup(containerAppEnvironmentResourceGroupName)
 }
+resource containerAppEnvironmentCertificate 'Microsoft.App/managedEnvironments/certificates@2022-03-01' existing = {
+  name: '${containerAppEnvironmentResourceName}/pollstar-test.hexmaster.nl'
+  scope: resourceGroup(containerAppEnvironmentResourceGroupName)
+}
 
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   name: '${defaultResourceName}-cnt-api'
@@ -39,7 +43,15 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
             latestRevision: true
           }
         ]
+        customDomains:[
+          {
+            certificateId: containerAppEnvironmentCertificate.id
+             name: 'pollstar-test.hexmaster.nl'
+              bindingType: 'SniEnabled'
+          }
+       ]
       }
+
     }
     template: {
       containers: [

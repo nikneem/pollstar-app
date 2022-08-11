@@ -1,0 +1,26 @@
+<h2 mat-dialog-title translate="session.join.dialog.title"></h2>
+<mat-dialog-content>
+  <p translate="session.join.dialog.text"></p>
+  <form [formGroup]="joinSessionForm" novalidate>
+    <input type="hidden" formControlName="userId" />
+    <mat-form-field class="full-width" appearance="fill" color="accent">
+      <mat-label translate="session.join.dialog.code"></mat-label>
+      <input matInput formControlName="code" />
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-flat-button
+    color="primary"
+    [mat-dialog-close]="false"
+    translate="button.cancel"
+  ></button>
+  <button
+    mat-flat-button
+    color="accent"
+    translate="button.join"
+    [disabled]="joinSessionForm.pristine || !joinSessionForm.valid"
+    (click)="joinSession()"
+  ></button>
+</mat-dialog-actions>

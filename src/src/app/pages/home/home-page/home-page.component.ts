@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateSessionComponent } from 'src/app/shared/components/create-session/create-session.component';
+import { JoinSessionComponent } from 'src/app/shared/components/join-session/join-session.component';
 
 @Component({
   selector: 'app-home-page',
@@ -12,6 +13,9 @@ export class HomePageComponent implements OnInit {
 
   createSession() {
     this.dialog.open(CreateSessionComponent);
+  }
+  joinSession() {
+    this.dialog.open(JoinSessionComponent);
   }
 
   ngOnInit(): void {}

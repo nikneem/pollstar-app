@@ -7,9 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { PollsListComponent } from './polls-list/polls-list.component';
 import { PollListTileComponent } from './poll-list-tile/poll-list-tile.component';
 import { PollsDetailsDialogComponent } from './polls-details-dialog/polls-details-dialog.component';
+import { JoinSessionComponent } from './join-session/join-session.component';
 
 @NgModule({
-  declarations: [CreateSessionComponent, PollsListComponent, PollListTileComponent, PollsDetailsDialogComponent],
+  declarations: [CreateSessionComponent, PollsListComponent, PollListTileComponent, PollsDetailsDialogComponent, JoinSessionComponent],
   imports: [CommonModule, TranslateModule, ReactiveFormsModule, MaterialModule],
   exports: [PollsListComponent],
 })

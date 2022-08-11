@@ -1,4 +1,4 @@
-<div class="poll-list-item" *ngIf="poll">
+<div class="poll-list-item" *ngIf="poll" (click)="activatePoll(poll)">
   <h4>{{ poll.name }}</h4>
   <p>{{ poll.description }}</p>
 </div>

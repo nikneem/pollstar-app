@@ -1,15 +1,17 @@
 <h2 mat-dialog-title translate="session.manage.poll.title"></h2>
 <mat-dialog-content>
-  <p translate="session.manage.poll.title"></p>
+  <p translate="session.manage.poll.text"></p>
   <form [formGroup]="pollDetailsForm" novalidate>
     <input type="hidden" formControlName="id" />
     <input type="hidden" formControlName="sessionId" />
     <mat-form-field class="full-width" appearance="fill" color="accent">
-      <mat-label translate="session.create.dialog.name"></mat-label>
+      <mat-label translate="session.manage.poll.question.name"></mat-label>
       <input matInput formControlName="name" />
     </mat-form-field>
     <mat-form-field class="full-width" appearance="fill" color="accent">
-      <mat-label translate="session.create.dialog.description"></mat-label>
+      <mat-label
+        translate="session.manage.poll.question.description"
+      ></mat-label>
       <input matInput formControlName="description" />
     </mat-form-field>
 
@@ -26,7 +28,9 @@
                   color="accent"
                   [style.fontSize.px]="'10'"
                 >
-                  <mat-label translate="session.manage.poll.name"></mat-label>
+                  <mat-label
+                    translate="session.manage.poll.answer.name"
+                  ></mat-label>
                   <input matInput formControlName="name" />
                 </mat-form-field>
                 <mat-form-field
@@ -34,7 +38,7 @@
                   color="accent"
                   [style.fontSize.px]="'10'"
                 >
-                  <mat-label translate="session.manage.poll.description">
+                  <mat-label translate="session.manage.poll.answer.description">
                   </mat-label>
                   <input matInput formControlName="description" />
                 </mat-form-field>

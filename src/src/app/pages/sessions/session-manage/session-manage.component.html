@@ -1,9 +1,30 @@
 <mat-toolbar *ngIf="activeSession">
-  {{ activeSession.name }}
-  <span *ngIf="selectedPoll"> &gt; {{ selectedPoll.name }} </span>
+  {{ activeSession.name }} (session code: {{ activeSession.code }})
+  <span *ngIf="selectedPoll">&nbsp;&gt;&nbsp;{{ selectedPoll.name }} </span>
 </mat-toolbar>
 
-<div class="selected-poll" *ngIf="selectedPoll"></div>
+<div class="selected-poll" *ngIf="selectedPoll">
+  <div class="" *ngIf="selectedPoll">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ selectedPoll.name }}</mat-card-title>
+        <mat-card-subtitle>{{ selectedPoll.description }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="poll-options">
+          <div class="poll-option" *ngFor="let option of selectedPoll.options">
+            <mat-card class="primary">
+              <mat-card-title>{{ option.name }}</mat-card-title>
+              <mat-card-content>
+                <p>{{ option.description }}</p>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 
 <!-- If not the owner -->
 <div class="" *ngIf="activeSession">
@@ -16,7 +37,7 @@
         translate="session.manage.disabled.text"
       ></mat-card-content>
       <a
-        [routerLink]="['/sessions/attend/:id', sessionId]"
+        [routerLink]="['/view/:id', sessionId]"
         translate="session.manage.disabled.attend"
       ></a>
     </mat-card>

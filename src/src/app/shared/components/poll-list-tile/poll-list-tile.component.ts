@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IAppState } from 'src/app/state/app-state';
+import { pollActivate, pollSelect } from 'src/app/state/polls/polls-actions';
 import { IPollsListItemDto } from 'src/app/state/session/session-models';
 
 @Component({
@@ -9,7 +12,11 @@ import { IPollsListItemDto } from 'src/app/state/session/session-models';
 export class PollListTileComponent implements OnInit {
   @Input()
   public poll?: IPollsListItemDto;
-  constructor() {}
+  constructor(private store: Store<IAppState>) {}
+
+  public activatePoll(poll: IPollsListItemDto) {
+    this.store.dispatch(pollSelect({ id: poll.id }));
+  }
 
   ngOnInit(): void {}
 }

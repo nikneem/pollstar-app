@@ -1,0 +1,15 @@
+@import "../../../../scss/variables.scss";
+
+.poll-options {
+  display: flex;
+  flex-flow: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  .poll-option {
+    flex: 1 1 25%;
+  }
+}
+
+.mat-card .primary {
+  background-color: $background;
+}

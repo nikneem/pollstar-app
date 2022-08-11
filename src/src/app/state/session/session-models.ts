@@ -6,6 +6,7 @@ export interface ISessionCreateDto {
 
 export interface ISessionDetailsDto {
   id: string;
+  code: string;
   name: string;
   description?: string;
   isOwner: boolean;

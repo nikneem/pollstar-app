@@ -1,5 +1,10 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { pollCreate, pollCreated } from './polls-actions';
+import {
+  pollActivated,
+  pollCreate,
+  pollCreated,
+  pollSelected,
+} from './polls-actions';
 import { IPollDto } from './polls-models';
 import { INITIAL_POLLS_STATE, IPollsState } from './polls-state';
 
@@ -13,6 +18,16 @@ const _pollsReducer = createReducer(
     ...state,
     isRefreshing: false,
     selectedPoll: dto,
+  })),
+  on(pollSelected, (state, { poll }) => ({
+    ...state,
+    isRefreshing: false,
+    selectedPoll: poll,
+  })),
+  on(pollActivated, (state, { poll }) => ({
+    ...state,
+    isRefreshing: false,
+    activePoll: poll,
   }))
 );
 

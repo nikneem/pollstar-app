@@ -8,11 +8,11 @@ import { sessionGet } from 'src/app/state/session/session-actions';
 import { ISessionDetailsDto } from 'src/app/state/session/session-models';
 
 @Component({
-  selector: 'app-session-manage',
-  templateUrl: './session-manage.component.html',
-  styleUrls: ['./session-manage.component.scss'],
+  selector: 'app-view-session-page',
+  templateUrl: './view-session-page.component.html',
+  styleUrls: ['./view-session-page.component.scss'],
 })
-export class SessionManageComponent implements OnInit, OnDestroy {
+export class ViewSessionPageComponent implements OnInit, OnDestroy {
   private sessionIdSubsciption?: Subscription;
   private userIdSubscription?: Subscription;
   private sessionSubscription?: Subscription;
@@ -21,7 +21,7 @@ export class SessionManageComponent implements OnInit, OnDestroy {
   private userId?: string;
   public sessionId?: string;
   public activeSession?: ISessionDetailsDto;
-  public selectedPoll?: IPollDto;
+  public activePoll?: IPollDto;
 
   constructor(private route: ActivatedRoute, private store: Store<IAppState>) {}
 
@@ -45,7 +45,7 @@ export class SessionManageComponent implements OnInit, OnDestroy {
     });
     this.selectedPollSubscription = this.store
       .select((str) => str.pollsState)
-      .subscribe((ps) => (this.selectedPoll = ps.selectedPoll));
+      .subscribe((ps) => (this.activePoll = ps.activePoll));
     this.userIdSubscription = this.store
       .select((x) => x.userState)
       .subscribe((val) => {

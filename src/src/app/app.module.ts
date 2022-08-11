@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SessionEffects } from './state/session/session-effects';
 import { SessionsModule } from './pages/sessions/sessions.module';
 import { PollsEffects } from './state/polls/polls-effects';
+import { ViewModule } from './pages/view/view.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/translations/', '.json');
@@ -32,6 +33,7 @@ let metaReducers: any[] = [];
     HttpClientModule,
     HomeModule,
     SessionsModule,
+    ViewModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {

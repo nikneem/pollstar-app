@@ -16,11 +16,29 @@
         "description": "Description"
       }
     },
+    "view": {
+      "empty-state": {
+        "title": "No poll active",
+        "text": "You are in an active session. No poll is active at this time. Please wait for the moderator to activate a poll."
+      }
+    },
     "manage": {
       "disabled": {
         "title": "Management panel is disabled",
         "text": "You are not the owner of this session. Management of this session is disabled. You can attend the session by clicking the link below.",
         "attend": "Attend the session"
+      },
+      "poll": {
+        "title": "Poll details",
+        "text": "Ask a question and add optional answers",
+        "question": {
+          "name": "Question",
+          "description": "Question description"
+        },
+        "answer": {
+          "name": "Answer",
+          "description": "Answer description"
+        }
       },
       "polls": {
         "empty-state": "There are no polls in this session. start by creating a first poll"

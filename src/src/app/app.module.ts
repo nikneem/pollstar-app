@@ -19,6 +19,7 @@ import { SessionEffects } from './state/session/session-effects';
 import { SessionsModule } from './pages/sessions/sessions.module';
 import { PollsEffects } from './state/polls/polls-effects';
 import { ViewModule } from './pages/view/view.module';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/translations/', '.json');
@@ -30,6 +31,7 @@ let metaReducers: any[] = [];
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgApexchartsModule,
     HttpClientModule,
     HomeModule,
     SessionsModule,

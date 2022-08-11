@@ -23,7 +23,7 @@ resource containerAppEnvironmentCertificate 'Microsoft.App/managedEnvironments/c
 }
 
 resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
-  name: '${defaultResourceName}-cnt-api'
+  name: '${defaultResourceName}-aca'
   location: location
   identity: {
     type: 'SystemAssigned'

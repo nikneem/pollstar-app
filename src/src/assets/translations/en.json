@@ -16,6 +16,13 @@
         "description": "Description"
       }
     },
+    "join": {
+      "dialog": {
+        "title": "Join session",
+        "text": "Enter the reference code of the session you want to join",
+        "code": "Reference code"
+      }
+    },
     "view": {
       "empty-state": {
         "title": "No poll active",
@@ -48,6 +55,7 @@
   "button": {
     "ok": "OK",
     "cancel": "Cancel",
+    "join": "Join",
     "save": "Save",
     "create-session": "Create a session",
     "join-session": "Join a session"

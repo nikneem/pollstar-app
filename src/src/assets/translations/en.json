@@ -26,7 +26,8 @@
     "view": {
       "empty-state": {
         "title": "No poll active",
-        "text": "You are in an active session. No poll is active at this time. Please wait for the moderator to activate a poll."
+        "text": "You are in an active session, however no poll is active at this time. Please wait for the moderator to activate a poll.",
+        "manage": "Manage this session"
       }
     },
     "manage": {

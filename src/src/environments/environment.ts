@@ -4,10 +4,12 @@
 
 export const environment = {
   production: false,
-  backendUrl: 'https://localhost:5008',
+  backendUrl:
+    'https://pollstar-api-test-neu-cnt-api.delightfuldesert-ef515fd1.northeurope.azurecontainerapps.io',
 };
 
 /*
+'https://localhost:5008',
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
  *

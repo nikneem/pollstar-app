@@ -2,15 +2,16 @@
   {{ activeSession.name }}
   <span *ngIf="activePoll">&nbsp;&gt;&nbsp;{{ activePoll.name }} </span>
 </mat-toolbar>
-<div class="" *ngIf="activeSession && activePoll">
+<div class="empty-state" *ngIf="activeSession && !activePoll">
   <mat-card>
     <mat-card-title translate="session.view.empty-state.title"></mat-card-title>
     <mat-card-content
       translate="session.view.empty-state.text"
     ></mat-card-content>
     <a
-      [routerLink]="['/sessions/attend/:id', activeSession.id]"
-      translate="session.manage.disabled.attend"
+      [routerLink]="['/sessions/manage/:id', activeSession.id]"
+      translate="session.view.empty-state.manage"
+      *ngIf="activeSession.isOwner"
     ></a>
   </mat-card>
 </div>

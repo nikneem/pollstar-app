@@ -26,9 +26,14 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private store: Store<IAppState>) {}
 
   private loadSessionDetails() {
-    if (this.userId && this.sessionCode && (this.activeSession === undefined || this.activeSession.code !== this.sessionCode)) {
+    if (
+      this.userId &&
+      this.sessionCode &&
+      (this.activeSession === undefined ||
+        this.activeSession.code !== this.sessionCode)
+    ) {
       this.store.dispatch(
-        sessionJoin({ dto: { code: this.sessionCode, userId: this.userId }})
+        sessionJoin({ dto: { code: this.sessionCode, userId: this.userId } })
       );
     }
   }
@@ -42,7 +47,6 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
-        this.loadSessionDetails();
       });
 
     this.selectedPollSubscription = this.store

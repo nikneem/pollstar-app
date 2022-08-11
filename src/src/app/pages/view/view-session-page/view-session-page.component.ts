@@ -19,33 +19,36 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   private selectedPollSubscription?: Subscription;
 
   private userId?: string;
-  public sessionId?: string;
+  public sessionCode?: string;
   public activeSession?: ISessionDetailsDto;
   public activePoll?: IPollDto;
 
   constructor(private route: ActivatedRoute, private store: Store<IAppState>) {}
 
   private loadSessionDetails() {
-    if (this.userId && this.sessionId) {
+    if (this.userId && this.sessionCode && (this.activeSession === undefined || this.activeSession.code !== this.sessionCode)) {
       this.store.dispatch(
-        sessionGet({ sessionId: this.sessionId, userId: this.userId })
+        sessionGet({ sessionId: this.sessionCode, userId: this.userId })
       );
     }
   }
 
   ngOnInit(): void {
+    this.sessionIdSubsciption = this.route.params.subscribe((params) => {
+      this.sessionCode = params['id'];
+      this.loadSessionDetails();
+    });
     this.sessionSubscription = this.store
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
+        this.loadSessionDetails();
       });
-    this.sessionIdSubsciption = this.route.params.subscribe((params) => {
-      this.sessionId = params['id'];
-      this.loadSessionDetails();
-    });
+
     this.selectedPollSubscription = this.store
       .select((str) => str.pollsState)
       .subscribe((ps) => (this.activePoll = ps.activePoll));
+
     this.userIdSubscription = this.store
       .select((x) => x.userState)
       .subscribe((val) => {

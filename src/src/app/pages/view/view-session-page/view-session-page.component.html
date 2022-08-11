@@ -9,7 +9,7 @@
       translate="session.view.empty-state.text"
     ></mat-card-content>
     <a
-      [routerLink]="['/sessions/attend/:id', sessionId]"
+      [routerLink]="['/sessions/attend/:id', activeSession.id]"
       translate="session.manage.disabled.attend"
     ></a>
   </mat-card>

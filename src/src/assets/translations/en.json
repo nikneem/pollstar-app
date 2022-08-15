@@ -58,6 +58,7 @@
     "cancel": "Cancel",
     "join": "Join",
     "save": "Save",
+    "activate": "Activate",
     "create-session": "Create a session",
     "join-session": "Join a session"
   }

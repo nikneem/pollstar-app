@@ -1,6 +1,26 @@
-.empty-state{
-    display: flex;
-    flex-flow: column;
-    align-items: center;
-    padding: 2rem;
+.empty-state {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 2rem;
+}
+.poll-details {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 2rem;
+}
+.poll-options {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 2rem;
+}
+.poll-chart {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  padding: 2rem;
 }

@@ -2,16 +2,28 @@
   {{ activeSession.name }}
   <span *ngIf="activePoll">&nbsp;&gt;&nbsp;{{ activePoll.name }} </span>
 </mat-toolbar>
-<div *ngIf="chartOptions">
-  <apx-chart
-    #chart
-    [series]="chartOptions.series"
-    [chart]="chartOptions.chart"
-    [labels]="chartOptions.labels"
-    [responsive]="chartOptions.responsive"
-  ></apx-chart>
+<div class="poll-details" *ngIf="activeSession && activePoll">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ activePoll.name }}</mat-card-title>
+      <mat-card-subtitle>{{ activePoll.description }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="poll-options">
+        <div *ngFor="let option of activePoll.options">
+          <button
+            mat-flat-button
+            color="primary"
+            matTooltip="{{ option.description }}"
+          >
+            {{ option.name }}
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>
-<button mat-flat-button (click)="changeSeries()">Change</button>
+
 <div class="empty-state" *ngIf="activeSession && !activePoll">
   <mat-card>
     <mat-card-title translate="session.view.empty-state.title"></mat-card-title>
@@ -25,3 +37,15 @@
     ></a>
   </mat-card>
 </div>
+<div class="poll-chart">
+  <div *ngIf="chartOptions">
+    <apx-chart
+      #chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [labels]="chartOptions.labels"
+      [responsive]="chartOptions.responsive"
+    ></apx-chart>
+  </div>
+</div>
+<button mat-flat-button (click)="changeSeries()">Change</button>

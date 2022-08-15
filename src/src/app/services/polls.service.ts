@@ -19,4 +19,8 @@ export class PollsService {
     const url = `${environment.backendUrl}/api/polls/${id}`;
     return this.http.get<IPollDto>(url);
   }
+  public activate(id: string): Observable<IPollDto> {
+    const url = `${environment.backendUrl}/api/polls/${id}/activate`;
+    return this.http.get<IPollDto>(url);
+  }
 }

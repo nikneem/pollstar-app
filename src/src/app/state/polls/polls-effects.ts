@@ -61,7 +61,7 @@ export class PollsEffects {
     this.actions$.pipe(
       ofType(pollActivate),
       mergeMap((act) =>
-        this.pollsService.get(act.id).pipe(
+        this.pollsService.activate(act.id).pipe(
           map((dto) => pollActivated({ poll: dto })),
           catchError(() => {
             return of(pollFailure());

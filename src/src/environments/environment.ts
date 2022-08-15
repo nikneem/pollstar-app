@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  backendUrl:
-    'https://pollstar-api-test-neu-cnt-api.delightfuldesert-ef515fd1.northeurope.azurecontainerapps.io',
+  backendUrl: 'https://localhost:5008',
 };
 
 /*

@@ -6,19 +6,21 @@ import { IAppState } from 'src/app/state/app-state';
 import { IPollDto } from 'src/app/state/polls/polls-models';
 import { sessionGet, sessionJoin } from 'src/app/state/session/session-actions';
 import { ISessionDetailsDto } from 'src/app/state/session/session-models';
-import { ChartComponent } from 'ng-apexcharts';
+import { ApexLegend, ChartComponent } from 'ng-apexcharts';
 import {
   ApexNonAxisChartSeries,
   ApexResponsive,
   ApexChart,
 } from 'ng-apexcharts';
-import { animate } from '@angular/animations';
+import { PubsubService } from 'src/app/services/pubsub.service';
+import * as _ from 'lodash';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
   chart: ApexChart;
   responsive: ApexResponsive[];
   labels: any;
+  legend: ApexLegend;
 };
 
 @Component({
@@ -40,14 +42,22 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   public activeSession?: ISessionDetailsDto;
   public activePoll?: IPollDto;
 
-  constructor(private route: ActivatedRoute, private store: Store<IAppState>) {
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<IAppState>,
+    private realtimeService: PubsubService
+  ) {
     this.chartOptions = {
-      series: [1, 2, 3, 4, 5],
+      series: [],
       chart: {
         width: 640,
         type: 'pie',
+        foreColor: '#fff',
       },
-      labels: ['TeamA', 'Team B', 'Team C', 'Team D', 'Team E'],
+      labels: [],
+      legend: {
+        show: false,
+      },
       responsive: [
         {
           breakpoint: 640,
@@ -66,6 +76,13 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   changeSeries() {
     if (this.chart) {
       this.chart.updateSeries([2, 4, 8, 16, 32]);
+    }
+  }
+  private setupChart() {
+    if (this.activePoll && this.chart) {
+      const names = _(this.activePoll.options).map('name').value();
+      this.chartOptions.labels = names;
+      this.chart?.updateOptions(this.chartOptions);
     }
   }
   private loadSessionDetails() {
@@ -90,11 +107,17 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
+        if (this.activeSession && this.userId) {
+          this.realtimeService.connect(this.activeSession.id, this.userId);
+        }
       });
 
     this.selectedPollSubscription = this.store
       .select((str) => str.pollsState)
-      .subscribe((ps) => (this.activePoll = ps.activePoll));
+      .subscribe((ps) => {
+        this.activePoll = ps.activePoll;
+        this.setupChart();
+      });
 
     this.userIdSubscription = this.store
       .select((x) => x.userState)

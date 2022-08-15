@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAppState } from 'src/app/state/app-state';
+import { pollActivate } from 'src/app/state/polls/polls-actions';
 import { IPollDto } from 'src/app/state/polls/polls-models';
 import { sessionGet } from 'src/app/state/session/session-actions';
 import { ISessionDetailsDto } from 'src/app/state/session/session-models';
@@ -30,6 +31,12 @@ export class SessionManageComponent implements OnInit, OnDestroy {
       this.store.dispatch(
         sessionGet({ sessionId: this.sessionId, userId: this.userId })
       );
+    }
+  }
+
+  public activateSelected() {
+    if (this.selectedPoll) {
+      this.store.dispatch(pollActivate({ id: this.selectedPoll?.id }));
     }
   }
 

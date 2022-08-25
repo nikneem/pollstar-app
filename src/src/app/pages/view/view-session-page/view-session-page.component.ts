@@ -14,6 +14,9 @@ import {
 } from 'ng-apexcharts';
 import { PubsubService } from 'src/app/services/pubsub.service';
 import * as _ from 'lodash';
+import { voteCast, voteGetList } from 'src/app/state/votes/votes-actions';
+import { IPollVoteDto } from 'src/app/state/votes/votes-models';
+import {debounceTime} from 'rxjs/operators';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -36,6 +39,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   private userIdSubscription?: Subscription;
   private sessionSubscription?: Subscription;
   private selectedPollSubscription?: Subscription;
+  private graphSeriesSubscription?: Subscription;
 
   private userId?: string;
   public sessionCode?: string;
@@ -73,9 +77,34 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       ],
     };
   }
-  changeSeries() {
+  changeSeries(series: Array<IPollVoteDto>) {
+    const chartSeries = new Array<number>;
+    if (this.activePoll && this.activePoll.options)
+    {
+        this.activePoll.options.forEach((val)=>{
+          const itemIndex = _.findIndex(series, function (s){ return s.optionId == val.id;});
+          if (itemIndex >= 0){
+            chartSeries.push(series[itemIndex].votes);
+          } else {
+            chartSeries.push(0);
+          }
+          
+        });
+      }
+
     if (this.chart) {
-      this.chart.updateSeries([2, 4, 8, 16, 32]);
+      this.chart.updateSeries(chartSeries);
+    }
+  }
+  castVote(optionId: string) {
+    if (this.userId && this.activePoll && this.activeSession) {
+      const model = {
+        userId: this.userId,
+        sessionId: this.activeSession.id,
+        pollId: this.activePoll.id,
+        optionId: optionId,
+      };
+      this.store.dispatch(voteCast({ dto: model }));
     }
   }
   private setupChart() {
@@ -116,7 +145,10 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((str) => str.pollsState)
       .subscribe((ps) => {
         this.activePoll = ps.activePoll;
-        this.setupChart();
+        if (this.activePoll) {
+          this.setupChart();
+          this.store.dispatch(voteGetList({ pollId: this.activePoll.id }));
+        }
       });
 
     this.userIdSubscription = this.store
@@ -124,6 +156,17 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .subscribe((val) => {
         this.userId = val.userId;
         this.loadSessionDetails();
+      });
+    this.graphSeriesSubscription = this.store
+      .select((str) => str.votesState.graphSeries)
+      .pipe(
+        debounceTime(1000)
+      )
+      .subscribe((val) => {
+        const x = val
+        if (val) {
+          this.changeSeries(val);
+        }
       });
   }
   ngOnDestroy(): void {
@@ -138,6 +181,9 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
     }
     if (this.userIdSubscription) {
       this.userIdSubscription.unsubscribe();
+    }
+    if (this.graphSeriesSubscription) {
+      this.graphSeriesSubscription.unsubscribe();
     }
   }
 }

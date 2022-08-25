@@ -20,6 +20,7 @@ import { SessionsModule } from './pages/sessions/sessions.module';
 import { PollsEffects } from './state/polls/polls-effects';
 import { ViewModule } from './pages/view/view.module';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { VotesEffects } from './state/votes/votes-effects';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/translations/', '.json');
@@ -48,7 +49,12 @@ let metaReducers: any[] = [];
       metaReducers,
       initialState: INITIAL_APP_STATE,
     }),
-    EffectsModule.forRoot([UserEffects, SessionEffects, PollsEffects]),
+    EffectsModule.forRoot([
+      UserEffects,
+      SessionEffects,
+      PollsEffects,
+      VotesEffects,
+    ]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,

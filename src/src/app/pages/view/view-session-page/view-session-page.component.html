@@ -15,6 +15,7 @@
             mat-flat-button
             color="primary"
             matTooltip="{{ option.description }}"
+            (click)="castVote(option.id)"
           >
             {{ option.name }}
           </button>
@@ -48,4 +49,3 @@
     ></apx-chart>
   </div>
 </div>
-<button mat-flat-button (click)="changeSeries()">Change</button>

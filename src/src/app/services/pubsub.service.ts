@@ -6,6 +6,8 @@ import { IAppState } from '../state/app-state';
 import { pollActivated } from '../state/polls/polls-actions';
 import { IPollDto } from '../state/polls/polls-models';
 import { ISessionDetailsDto } from '../state/session/session-models';
+import { voteSeriesUpdate } from '../state/votes/votes-actions';
+import { IPollVoteDto } from '../state/votes/votes-models';
 
 export interface IPubSubConnectionInformation {
   pubsubClientUrl: string;
@@ -56,9 +58,14 @@ export class PubsubService {
     var eventMessage = JSON.parse(message);
     if (eventMessage.type === 'message') {
       var event = eventMessage.data as IRealtimeEvent<any>;
+      console.log(event);
       if (event.eventName === 'poll-activated') {
         const activatedPoll = event.payload as IPollDto;
         this.store.dispatch(pollActivated({ poll: activatedPoll }));
+      }
+      if (event.eventName === 'poll-votes') {
+        const incomingVotes = event.payload as Array<IPollVoteDto>;
+        this.store.dispatch(voteSeriesUpdate({ dto: incomingVotes }));
       }
     }
   }

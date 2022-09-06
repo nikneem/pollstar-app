@@ -45,7 +45,7 @@
         translate="session.manage.disabled.text"
       ></mat-card-content>
       <a
-        [routerLink]="['/view/:id', sessionId]"
+        [routerLink]="['/view', activeSession.code]"
         translate="session.manage.disabled.attend"
       ></a>
     </mat-card>

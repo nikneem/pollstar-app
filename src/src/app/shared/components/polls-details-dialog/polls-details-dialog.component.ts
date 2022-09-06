@@ -2,9 +2,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { Actions, ofType } from '@ngrx/effects';
 import { IAppState } from 'src/app/state/app-state';
-import { pollCreate } from 'src/app/state/polls/polls-actions';
+import { pollCreate, pollCreated } from 'src/app/state/polls/polls-actions';
 import { ICreatePollDto } from 'src/app/state/polls/polls-models';
+import { Subscription } from 'rxjs';
 
 export interface ISessionData {
   sessionId: string;
@@ -18,8 +20,11 @@ export interface ISessionData {
 export class PollsDetailsDialogComponent implements OnInit {
   public pollDetailsForm: FormGroup;
   public options: FormArray;
+  private actionsSubscription?: Subscription;
+
   constructor(
     private store: Store<IAppState>,
+    private _actions$: Actions,
     public dialogRef: MatDialogRef<PollsDetailsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ISessionData
   ) {
@@ -61,5 +66,11 @@ export class PollsDetailsDialogComponent implements OnInit {
     this.store.dispatch(pollCreate({ dto: poll }));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.actionsSubscription = this._actions$
+      .pipe(ofType(pollCreated))
+      .subscribe((poll) => {
+        this.dialogRef.close();
+      });
+  }
 }

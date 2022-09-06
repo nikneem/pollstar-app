@@ -8,10 +8,8 @@ import {
   sessionCreateFailed,
   sessionDetailsChanged,
   sessionGet,
-  sessionGetPollsList,
   sessionJoin,
   sessionJoinFailed,
-  sessionPollsListChanged,
 } from './session-actions';
 
 @Injectable()
@@ -36,18 +34,18 @@ export class SessionEffects {
   );
 
   sessionJoinEffect$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(sessionJoin),
-    mergeMap((act) =>
-      this.sessionsService.join(act.dto.code, act.dto.userId).pipe(
-        map((dto) => sessionDetailsChanged({ dto: dto })),
-        catchError(() => {
-          return of(sessionJoinFailed());
-        })
+    this.actions$.pipe(
+      ofType(sessionJoin),
+      mergeMap((act) =>
+        this.sessionsService.join(act.dto.code, act.dto.userId).pipe(
+          map((dto) => sessionDetailsChanged({ dto: dto })),
+          catchError(() => {
+            return of(sessionJoinFailed());
+          })
+        )
       )
     )
-  )
-);
+  );
 
   sessionGetEffect$ = createEffect(() =>
     this.actions$.pipe(
@@ -55,20 +53,6 @@ export class SessionEffects {
       mergeMap((act) =>
         this.sessionsService.get(act.sessionId, act.userId).pipe(
           map((dto) => sessionDetailsChanged({ dto: dto })),
-          catchError(() => {
-            return of(sessionCreateFailed());
-          })
-        )
-      )
-    )
-  );
-
-  sessionGetPollsListEffect$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(sessionGetPollsList),
-      mergeMap((act) =>
-        this.sessionsService.getPolls(act.sessionId).pipe(
-          map((dto) => sessionPollsListChanged({ polls: dto })),
           catchError(() => {
             return of(sessionCreateFailed());
           })

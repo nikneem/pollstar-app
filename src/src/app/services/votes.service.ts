@@ -12,11 +12,11 @@ export class VotesService {
   constructor(private http: HttpClient) {}
 
   public get(pollId: string): Observable<IVotesDto> {
-    const url = `${environment.backendUrl}/api/votes/${pollId}`;
+    const url = `${environment.backendUrl}/votes/${pollId}`;
     return this.http.get<IVotesDto>(url);
   }
   public post(vote: ICastVoteDto): Observable<IVotesDto> {
-    const url = `${environment.backendUrl}/api/votes`;
+    const url = `${environment.backendUrl}/votes`;
     return this.http.post<IVotesDto>(url, vote);
   }
 }

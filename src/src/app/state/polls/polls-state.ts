@@ -1,9 +1,10 @@
-import { IPollDto } from './polls-models';
+import { IPollDto, IPollsListItemDto } from './polls-models';
 
 export interface IPollsState {
-    activePoll?: IPollDto;
-    selectedPoll?: IPollDto;
-    isRefreshing: boolean;
+  sessionPolls?: Array<IPollsListItemDto>;
+  activePoll?: IPollDto;
+  selectedPoll?: IPollDto;
+  isRefreshing: boolean;
 }
 
 export const INITIAL_POLLS_STATE: IPollsState = {

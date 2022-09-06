@@ -12,7 +12,7 @@ export class UsersService {
 
   public identify(userId?: string): Observable<IUserDetailsDto> {
     const userIdAddon = userId ? `/${userId}` : '';
-    const url = `${environment.backendUrl}/api/users${userIdAddon}`;
+    const url = `${environment.backendUrl}/users${userIdAddon}`;
     return this.http.get<IUserDetailsDto>(url);
   }
 }

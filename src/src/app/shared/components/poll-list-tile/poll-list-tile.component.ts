@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { IAppState } from 'src/app/state/app-state';
 import { pollActivate, pollSelect } from 'src/app/state/polls/polls-actions';
-import { IPollsListItemDto } from 'src/app/state/session/session-models';
+import { IPollsListItemDto } from 'src/app/state/polls/polls-models';
 
 @Component({
   selector: 'app-poll-list-tile',

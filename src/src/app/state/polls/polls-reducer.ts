@@ -3,9 +3,11 @@ import {
   pollActivated,
   pollCreate,
   pollCreated,
+  pollListItemAdded,
+  pollListOk,
   pollSelected,
 } from './polls-actions';
-import { IPollDto } from './polls-models';
+import { IPollDto, IPollsListItemDto } from './polls-models';
 import { INITIAL_POLLS_STATE, IPollsState } from './polls-state';
 
 const _pollsReducer = createReducer(
@@ -28,8 +30,31 @@ const _pollsReducer = createReducer(
     ...state,
     isRefreshing: false,
     activePoll: poll,
-  }))
+  })),
+  on(pollListOk, (state, { polls }) => ({
+    ...state,
+    sessionPolls: polls,
+  })),
+  on(pollListItemAdded, (state, { poll }) =>
+    sessionPollAddedHandler(state, poll)
+  )
 );
+
+function sessionPollAddedHandler(
+  state: IPollsState,
+  payload: IPollsListItemDto
+): IPollsState {
+  const copyState: IPollsState = Object.assign({}, state);
+
+  let pollsList = copyState.sessionPolls
+    ? new Array<IPollsListItemDto>(...copyState.sessionPolls)
+    : new Array<IPollsListItemDto>();
+
+  pollsList.push(payload);
+  copyState.sessionPolls = pollsList;
+
+  return copyState;
+}
 
 export function pollsReducer(state: IPollsState | undefined, action: Action) {
   return _pollsReducer(state, action);

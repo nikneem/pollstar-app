@@ -18,3 +18,9 @@ export interface ICreatePollDto {
   displayOrder: number;
   options?: Array<IPollOptionDto>;
 }
+export interface IPollsListItemDto {
+  id: string;
+  name: string;
+  description?: string;
+  displayOrder: number;
+}

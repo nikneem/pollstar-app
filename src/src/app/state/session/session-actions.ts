@@ -1,6 +1,5 @@
 import { createAction, props } from '@ngrx/store';
 import {
-  IPollsListItemDto,
   ISessionCreateDto,
   ISessionDetailsDto,
   ISessionJoinDto,
@@ -26,17 +25,4 @@ export const sessionGet = createAction(
 export const sessionDetailsChanged = createAction(
   '[Session] Details changed',
   props<{ dto: ISessionDetailsDto }>()
-);
-
-export const sessionGetPollsList = createAction(
-  '[Session] Get Polls List',
-  props<{ sessionId: string }>()
-);
-export const sessionPollsListChanged = createAction(
-  '[Session] Session polls list changed',
-  props<{ polls: Array<IPollsListItemDto> }>()
-);
-export const sessionPollAdded = createAction(
-  '[Session] SessionPollAdded',
-  props<{ poll: IPollsListItemDto }>()
 );

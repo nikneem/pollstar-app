@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { IAppState } from 'src/app/state/app-state';
-import { sessionGetPollsList } from 'src/app/state/session/session-actions';
-import { IPollsListItemDto } from 'src/app/state/session/session-models';
+import { pollList } from 'src/app/state/polls/polls-actions';
+import { IPollsListItemDto } from 'src/app/state/polls/polls-models';
 import { PollsDetailsDialogComponent } from '../polls-details-dialog/polls-details-dialog.component';
 
 @Component({
@@ -30,7 +30,7 @@ export class PollsListComponent implements OnInit, OnDestroy {
   }
   private refreshPollsList() {
     if (this.sessionId) {
-      this.store.dispatch(sessionGetPollsList({ sessionId: this.sessionId }));
+      this.store.dispatch(pollList({ id: this.sessionId }));
     }
   }
 
@@ -42,7 +42,7 @@ export class PollsListComponent implements OnInit, OnDestroy {
         this.refreshPollsList();
       });
     this.sessionPollsSubscription = this.store
-      .select((str) => str.sessionState.sessionPolls)
+      .select((str) => str.pollsState.sessionPolls)
       .subscribe((act) => {
         this.sessionPolls = act;
       });

@@ -28,7 +28,7 @@ export class PubsubService {
 
   public connect(sessionId: string, userId: string) {
     this.sessionId = sessionId;
-    var url = `${environment.backendUrl}/api/sessions/${sessionId}/realtime?userId=${userId}`;
+    var url = `${environment.backendUrl}/sessions/${sessionId}/realtime?userId=${userId}`;
     this.http.get<IPubSubConnectionInformation>(url).subscribe((val) => {
       this.connectSocket(val.pubsubClientUrl);
     });

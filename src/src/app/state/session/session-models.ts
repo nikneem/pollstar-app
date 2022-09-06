@@ -16,10 +16,3 @@ export interface ISessionDetailsDto {
   description?: string;
   isOwner: boolean;
 }
-
-export interface IPollsListItemDto {
-  id: string;
-  name: string;
-  description?: string;
-  displayOrder: number;
-}

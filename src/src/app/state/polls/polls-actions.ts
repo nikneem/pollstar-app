@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { ICreatePollDto, IPollDto } from './polls-models';
+import { ICreatePollDto, IPollDto, IPollsListItemDto } from './polls-models';
 
 export const pollCreate = createAction(
   '[Polls] Create',
@@ -8,6 +8,15 @@ export const pollCreate = createAction(
 export const pollCreated = createAction(
   '[Polls] Created',
   props<{ dto: IPollDto }>()
+);
+export const pollList = createAction('[Polls] List', props<{ id: string }>());
+export const pollListOk = createAction(
+  '[Polls] List OK',
+  props<{ polls: Array<IPollsListItemDto> }>()
+);
+export const pollListItemAdded = createAction(
+  '[Polls] List OK',
+  props<{ poll: IPollDto }>()
 );
 
 export const pollSelect = createAction(

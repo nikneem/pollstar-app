@@ -32,6 +32,23 @@ jobs:
     needs: versionize
     steps:
       - uses: actions/checkout@v2
+      - name: Node [16.x]
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - name: Install NPM Packages
+        working-directory: src
+        run: |
+          npm i
+          npm i @angular/cli -g
+      - name: Compile Angular app with Test config
+        working-directory: src
+        run: |
+          ng build --configuration test --output-path ./test-published
+      - name: Compile Angular app with Prod config
+        working-directory: src
+        run: |
+          ng build --configuration production --output-path ./prod-published
       - name: Build container images
         working-directory: src
         run: |

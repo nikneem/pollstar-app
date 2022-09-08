@@ -18,7 +18,7 @@ export class PollsService {
   }
 
   public list(id: string): Observable<Array<IPollsListItemDto>> {
-    const url = `${this.backendUrl}/polls?session-id=${id}`;
+    const url = `${this.backendUrl}/polls?session=${id}`;
     return this.http.get<Array<IPollsListItemDto>>(url);
   }
   public get(id: string): Observable<IPollDto> {

@@ -38,8 +38,10 @@ export class PollsListComponent implements OnInit, OnDestroy {
     this.sessionIdSubscription = this.store
       .select((str) => str.sessionState.activeSession)
       .subscribe((act) => {
-        this.sessionId = act?.id;
-        this.refreshPollsList();
+        if (act) {
+          this.sessionId = act.id;
+          this.refreshPollsList();
+        }
       });
     this.sessionPollsSubscription = this.store
       .select((str) => str.pollsState.sessionPolls)

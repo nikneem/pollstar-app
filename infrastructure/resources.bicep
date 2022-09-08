@@ -11,6 +11,9 @@ param containerAppEnvironmentResourceName string
 ])
 param environmentName string
 
+param containerPort int = 80
+param containerAppName string = 'pollstar-app'
+
 var containerName = environmentName == 'prod' ? 'pollstar-app' : 'pollstar-app-${environmentName}'
 
 resource containerAppEnvironments 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
@@ -30,11 +33,13 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
   }
   properties: {
     managedEnvironmentId: containerAppEnvironments.id
+
     configuration: {
       activeRevisionsMode: 'Single'
+      secrets: []
       ingress: {
         external: true
-        targetPort: 80
+        targetPort: containerPort
         transport: 'auto'
         allowInsecure: false
         traffic: [
@@ -43,30 +48,36 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
             latestRevision: true
           }
         ]
-        customDomains:[
-          {
-            certificateId: containerAppEnvironmentCertificate.id
-             name: 'pollstar-test.hexmaster.nl'
-              bindingType: 'SniEnabled'
-          }
-       ]
       }
-
+      dapr: {
+        enabled: false
+      }
     }
     template: {
       containers: [
         {
-          image: 'docker.io/nikneem/${containerName}:${containerVersion}'
-          name: 'pollstar-api'
+          image: 'pollstarinttestneuacr.azurecr.io/${containerAppName}:${containerVersion}'
+          name: containerAppName
           resources: {
             cpu: json('0.25')
             memory: '0.5Gi'
           }
+          env: []
         }
       ]
       scale: {
         minReplicas: 0
-        maxReplicas: 10
+        maxReplicas: 6
+        rules: [
+          {
+            name: 'http-rule'
+            http: {
+              metadata: {
+                concurrentRequests: '30'
+              }
+            }
+          }
+        ]
       }
     }
   }

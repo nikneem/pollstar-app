@@ -14,9 +14,7 @@ import {
 export class PollsService {
   private backendUrl: string;
   constructor(private http: HttpClient) {
-    this.backendUrl = environment.pollsServiceUrl
-      ? environment.pollsServiceUrl
-      : environment.backendUrl;
+    this.backendUrl = environment.backendUrl;
   }
 
   public list(id: string): Observable<Array<IPollsListItemDto>> {

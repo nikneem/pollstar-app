@@ -7,6 +7,9 @@
     },
     "environmentName": {
       "value": "test"
+    },
+    "locationAbbreviation": {
+      "value": "neu"
     }
   }
 }

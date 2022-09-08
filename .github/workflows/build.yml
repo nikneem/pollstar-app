@@ -4,11 +4,19 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  IMAGE_NAME: pollstar-app
+
 jobs:
-  build:
+  versionize:
     runs-on: ubuntu-latest
+    outputs:
+      semver: ${{ steps.gitversion.outputs.MajorMinorPatch }}
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
@@ -18,48 +26,28 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.7
         with:
           useConfigFile: true
-      - name: Node [16.x]
-        uses: actions/setup-node@v1
+
+  build:
+    runs-on: ubuntu-latest
+    needs: versionize
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build container images
+        working-directory: src
+        run: |
+          docker build . --file Dockerfile --tag ${{ secrets.ACR_LOGIN_SERVER }}/$IMAGE_NAME:${{needs.versionize.outputs.semver}}
+          docker build . --file Dockerfile --tag ${{ secrets.ACR_LOGIN_SERVER }}/$IMAGE_NAME:latest
+      - name: Login to ACR
+        uses: azure/docker-login@v1
         with:
-          node-version: 16.x
-      - name: Install NPM Packages
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: Push container images
         working-directory: src
         run: |
-          npm i
-          npm i @angular/cli -g
-      - name: Compile Angular app with Test config
-        working-directory: src
-        run: |
-          ng build --configuration test --output-path ./test-published
-      - name: Compile Angular app with Prod config
-        working-directory: src
-        run: |
-          ng build --configuration production --output-path ./prod-published
-
-      - name: Build versioned test image
-        working-directory: src
-        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-app-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
-      - name: Build latest test image
-        working-directory: src
-        run: docker build . --file Dockerfile.test --tag nikneem/pollstar-app-test:latest
-      - name: Build versioned prod image
-        working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-app:${{ steps.gitversion.outputs.MajorMinorPatch }}
-      - name: Build latest prod image
-        working-directory: src
-        run: docker build . --file Dockerfile --tag nikneem/pollstar-app:latest
-
-      - name: Login to docker hub
-        run: docker login -u nikneem -p ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Push versioned image to docker
-        run: docker push nikneem/pollstar-app-test:${{ steps.gitversion.outputs.MajorMinorPatch }}
-      - name: Push latest image to docker
-        run: docker push nikneem/pollstar-app-test:latest
-      - name: Push versioned image to docker
-        run: docker push nikneem/pollstar-app:${{ steps.gitversion.outputs.MajorMinorPatch }}
-      - name: Push latest image to docker
-        run: docker push nikneem/pollstar-app:latest
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/$IMAGE_NAME:${{needs.versionize.outputs.semver}}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/$IMAGE_NAME:latest
 
   publish-bicep:
     runs-on: ubuntu-latest
@@ -76,7 +64,7 @@ jobs:
           path: infrastructure/*.json
 
   infrastructure-incremental-test:
-    needs: [build, publish-bicep]
+    needs: [build, publish-bicep, versionize]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -92,17 +80,8 @@ jobs:
         uses: azure/login@v1.4.0
         with:
           creds: ${{ secrets.AZURE_TEST }}
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
-        with:
-          versionSpec: "5.x"
-      - name: Determine Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
-        with:
-          useConfigFile: true
       - name: Deploy Infrastructure
         id: arm
         uses: Azure/cli@1.0.4
         with:
-          inlineScript: az deployment sub create --name pollstar-front-end --location northeurope --template-file ./infrastructure/main.json --parameters ./infrastructure/params.test.json --parameters locationAbbreviation=neu --parameters containerVersion=${{ steps.gitversion.outputs.MajorMinorPatch }}
+          inlineScript: az deployment sub create --name $IMAGE_NAME  --location northeurope --template-file ./infrastructure/main.json --parameters ./infrastructure/params.test.json --parameters containerVersion=${{needs.versionize.outputs.semver}}

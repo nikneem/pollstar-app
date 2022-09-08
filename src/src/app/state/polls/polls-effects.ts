@@ -14,11 +14,27 @@ import {
   pollListOk,
   pollSelect,
   pollSelected,
+  pollUpdate,
+  pollUpdated,
 } from './polls-actions';
 
 @Injectable()
 export class PollsEffects {
   constructor(private actions$: Actions, private pollsService: PollsService) {}
+
+  pollListEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(pollList),
+      mergeMap((act) =>
+        this.pollsService.list(act.id).pipe(
+          map((dto) => pollListOk({ polls: dto })),
+          catchError(() => {
+            return of(pollFailure());
+          })
+        )
+      )
+    )
+  );
 
   pollCreateEffect$ = createEffect(() =>
     this.actions$.pipe(
@@ -45,6 +61,21 @@ export class PollsEffects {
       )
     )
   );
+
+  pollUpdateEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(pollUpdate),
+      mergeMap((act) =>
+        this.pollsService.put(act.id, act.dto).pipe(
+          map((dto) => pollUpdated({ dto: dto })),
+          catchError(() => {
+            return of(pollFailure());
+          })
+        )
+      )
+    )
+  );
+
   pollSelectEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(pollSelect),
@@ -64,19 +95,6 @@ export class PollsEffects {
       mergeMap((act) =>
         this.pollsService.activate(act.id).pipe(
           map((dto) => pollActivated({ poll: dto })),
-          catchError(() => {
-            return of(pollFailure());
-          })
-        )
-      )
-    )
-  );
-  pollListEffect$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(pollList),
-      mergeMap((act) =>
-        this.pollsService.list(act.id).pipe(
-          map((dto) => pollListOk({ polls: dto })),
           catchError(() => {
             return of(pollFailure());
           })

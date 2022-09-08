@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { PollsDetailsDialogComponent } from 'src/app/shared/components/polls-details-dialog/polls-details-dialog.component';
 import { IAppState } from 'src/app/state/app-state';
 import { pollActivate } from 'src/app/state/polls/polls-actions';
 import { IPollDto } from 'src/app/state/polls/polls-models';
@@ -24,7 +26,11 @@ export class SessionManageComponent implements OnInit, OnDestroy {
   public activeSession?: ISessionDetailsDto;
   public selectedPoll?: IPollDto;
 
-  constructor(private route: ActivatedRoute, private store: Store<IAppState>) {}
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<IAppState>,
+    private dialog: MatDialog
+  ) {}
 
   private loadSessionDetails() {
     if (this.userId && this.sessionId) {
@@ -37,6 +43,23 @@ export class SessionManageComponent implements OnInit, OnDestroy {
   public activateSelected() {
     if (this.selectedPoll) {
       this.store.dispatch(pollActivate({ id: this.selectedPoll?.id }));
+    }
+  }
+  public editSelectedPoll() {
+    if (this.selectedPoll) {
+      const detailsDialog = this.dialog.open(PollsDetailsDialogComponent, {
+        width: '80%',
+        data: {
+          sessionId: this.sessionId,
+          poll: this.selectedPoll,
+        },
+      });
+
+      detailsDialog.afterClosed().subscribe((result) => {
+        if (result.poll) {
+          this.selectedPoll = result.poll;
+        }
+      });
     }
   }
 

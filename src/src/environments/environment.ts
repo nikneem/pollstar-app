@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   backendUrl: 'https://pollstar-api.hexmaster.nl',
+  pollsServiceUrl: 'https://localhost:49155/api',
 };
 
 /*

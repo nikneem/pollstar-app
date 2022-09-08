@@ -18,6 +18,14 @@ export const pollListItemAdded = createAction(
   '[Polls] List OK',
   props<{ poll: IPollDto }>()
 );
+export const pollUpdate = createAction(
+  '[Polls] Update',
+  props<{ id: string; dto: IPollDto }>()
+);
+export const pollUpdated = createAction(
+  '[Polls] Updated',
+  props<{ dto: IPollDto }>()
+);
 
 export const pollSelect = createAction(
   '[Polls] Select',

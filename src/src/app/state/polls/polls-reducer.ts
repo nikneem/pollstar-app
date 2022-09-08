@@ -6,6 +6,7 @@ import {
   pollListItemAdded,
   pollListOk,
   pollSelected,
+  pollUpdated,
 } from './polls-actions';
 import { IPollDto, IPollsListItemDto } from './polls-models';
 import { INITIAL_POLLS_STATE, IPollsState } from './polls-state';
@@ -37,7 +38,8 @@ const _pollsReducer = createReducer(
   })),
   on(pollListItemAdded, (state, { poll }) =>
     sessionPollAddedHandler(state, poll)
-  )
+  ),
+  on(pollUpdated, (state, { dto }) => sessionPollUpdatedHandler(state, dto))
 );
 
 function sessionPollAddedHandler(
@@ -51,6 +53,32 @@ function sessionPollAddedHandler(
     : new Array<IPollsListItemDto>();
 
   pollsList.push(payload);
+  copyState.sessionPolls = pollsList;
+
+  return copyState;
+}
+
+function sessionPollUpdatedHandler(
+  state: IPollsState,
+  payload: IPollDto
+): IPollsState {
+  const copyState: IPollsState = Object.assign({}, state);
+  let pollsList = copyState.sessionPolls
+    ? new Array<IPollsListItemDto>(...copyState.sessionPolls)
+    : new Array<IPollsListItemDto>();
+
+  const newListItem = {
+    id: payload.id,
+    name: payload.name,
+    description: payload.description,
+    displayOrder: payload.displayOrder,
+  };
+  const pollIndex = pollsList.findIndex((p) => p.id == payload.id);
+  if (pollIndex >= 0) {
+    pollsList.splice(pollIndex, 1, newListItem);
+  } else {
+    pollsList.push(newListItem);
+  }
   copyState.sessionPolls = pollsList;
 
   return copyState;

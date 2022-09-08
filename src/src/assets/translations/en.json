@@ -53,6 +53,10 @@
       }
     }
   },
+  "poll": {
+    "activate": "Activate the current poll and make visitors vote on this poll",
+    "edit": "Edit this poll"
+  },
   "button": {
     "ok": "OK",
     "cancel": "Cancel",

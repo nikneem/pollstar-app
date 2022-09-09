@@ -4,17 +4,17 @@ param containerVersion string
 param containerAppEnvironmentResourceGroupName string
 param containerAppEnvironmentResourceName string
 
-@allowed([
-  'dev'
-  'test'
-  'prod'
-])
-param environmentName string
+// @allowed([
+//   'dev'
+//   'test'
+//   'prod'
+// ])
+// param environmentName string
 
 param containerPort int = 80
 param containerAppName string = 'pollstar-app'
 
-var containerName = environmentName == 'prod' ? 'pollstar-app' : 'pollstar-app-${environmentName}'
+//var containerName = environmentName == 'prod' ? 'pollstar-app' : 'pollstar-app-${environmentName}'
 
 resource containerAppEnvironments 'Microsoft.App/managedEnvironments@2022-03-01' existing = {
   name: containerAppEnvironmentResourceName
@@ -69,7 +69,7 @@ resource apiContainerApp 'Microsoft.App/containerApps@2022-03-01' = {
         }
       ]
       scale: {
-        minReplicas: 0
+        minReplicas: 1
         maxReplicas: 6
         rules: [
           {

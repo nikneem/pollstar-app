@@ -26,7 +26,7 @@ module resourcesModule 'resources.bicep' = {
   params: {
     defaultResourceName: toLower('${systemName}-app-${environmentName}-${locationAbbreviation}')
     location: location
-    environmentName: environmentName
+    //environmentName: environmentName
     containerVersion: containerVersion
     containerAppEnvironmentResourceGroupName: integrationResourceGroupName
     containerAppEnvironmentResourceName: toLower('${systemName}-int-${environmentName}-${locationAbbreviation}-env')

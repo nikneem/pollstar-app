@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -16,7 +22,7 @@ import { PubsubService } from 'src/app/services/pubsub.service';
 import * as _ from 'lodash';
 import { voteCast, voteGetList } from 'src/app/state/votes/votes-actions';
 import { IPollVoteDto } from 'src/app/state/votes/votes-models';
-import {debounceTime} from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -46,11 +52,37 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   public activeSession?: ISessionDetailsDto;
   public activePoll?: IPollDto;
 
+  public eventsList: Array<string>;
+
+  @HostListener('window:blur', ['$event'])
+  handleWindowBlur(event: any) {
+    this.eventsList.push('window:blur');
+  }
+  @HostListener('window:focus', ['$event'])
+  handleWindowFocus(event: any) {
+    this.eventsList.push('window:focus');
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  visibilitychange() {
+    this.checkHiddenDocument();
+  }
+
+  checkHiddenDocument() {
+    if (document.hidden) {
+      this.eventsList.push('window:hidden');
+    } else {
+      this.eventsList.push('window:visible');
+    }
+  }
+
   constructor(
     private route: ActivatedRoute,
     private store: Store<IAppState>,
     private realtimeService: PubsubService
   ) {
+    this.eventsList = new Array<string>();
+    this.eventsList.push('events');
     this.chartOptions = {
       series: [],
       chart: {
@@ -78,19 +110,19 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
     };
   }
   changeSeries(series: Array<IPollVoteDto>) {
-    const chartSeries = new Array<number>;
-    if (this.activePoll && this.activePoll.options)
-    {
-        this.activePoll.options.forEach((val)=>{
-          const itemIndex = _.findIndex(series, function (s){ return s.optionId == val.id;});
-          if (itemIndex >= 0){
-            chartSeries.push(series[itemIndex].votes);
-          } else {
-            chartSeries.push(0);
-          }
-          
+    const chartSeries = new Array<number>();
+    if (this.activePoll && this.activePoll.options) {
+      this.activePoll.options.forEach((val) => {
+        const itemIndex = _.findIndex(series, function (s) {
+          return s.optionId == val.id;
         });
-      }
+        if (itemIndex >= 0) {
+          chartSeries.push(series[itemIndex].votes);
+        } else {
+          chartSeries.push(0);
+        }
+      });
+    }
 
     if (this.chart) {
       this.chart.updateSeries(chartSeries);
@@ -159,11 +191,9 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       });
     this.graphSeriesSubscription = this.store
       .select((str) => str.votesState.graphSeries)
-      .pipe(
-        debounceTime(1000)
-      )
+      .pipe(debounceTime(1000))
       .subscribe((val) => {
-        const x = val
+        const x = val;
         if (val) {
           this.changeSeries(val);
         }

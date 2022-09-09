@@ -2,6 +2,10 @@
   {{ activeSession.name }}
   <span *ngIf="activePoll">&nbsp;&gt;&nbsp;{{ activePoll.name }} </span>
 </mat-toolbar>
+<div class="events">
+  <p *ngFor="let evt of eventsList">{{ evt }}</p>
+</div>
+
 <div class="poll-details" *ngIf="activeSession && activePoll">
   <mat-card>
     <mat-card-header>

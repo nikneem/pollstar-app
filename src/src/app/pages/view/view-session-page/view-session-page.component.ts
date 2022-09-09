@@ -62,6 +62,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   }
   @HostListener('window:focus', ['$event'])
   handleWindowFocus(event: any) {
+    this.connectRealTimeService();
     this.eventsList.push(
       'window:focus -> ' + this.realtimeService.pubsubClient?.readyState
     );
@@ -136,6 +137,11 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       this.chart.updateSeries(chartSeries);
     }
   }
+  connectRealTimeService() {
+    if (this.userId && this.activeSession) {
+      this.realtimeService.connect(this.activeSession.id, this.userId);
+    }
+  }
   castVote(optionId: string) {
     if (this.userId && this.activePoll && this.activeSession) {
       const model = {
@@ -176,9 +182,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
-        if (this.activeSession && this.userId) {
-          this.realtimeService.connect(this.activeSession.id, this.userId);
-        }
+        this.connectRealTimeService();
       });
 
     this.selectedPollSubscription = this.store

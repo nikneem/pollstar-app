@@ -27,11 +27,18 @@ export class PubsubService {
   constructor(private http: HttpClient, private store: Store<IAppState>) {}
 
   public connect(sessionId: string, userId: string) {
-    this.sessionId = sessionId;
-    var url = `${environment.backendUrl}/sessions/${sessionId}/realtime?userId=${userId}`;
-    this.http.get<IPubSubConnectionInformation>(url).subscribe((val) => {
-      this.connectSocket(val.pubsubClientUrl);
-    });
+    if (
+      this.pubsubClient &&
+      this.pubsubClient.readyState === this.pubsubClient.OPEN
+    ) {
+      console.log('connection already open, doing nothing');
+    } else {
+      this.sessionId = sessionId;
+      var url = `${environment.backendUrl}/sessions/${sessionId}/realtime?userId=${userId}`;
+      this.http.get<IPubSubConnectionInformation>(url).subscribe((val) => {
+        this.connectSocket(val.pubsubClientUrl);
+      });
+    }
   }
 
   private connectSocket(url: string) {

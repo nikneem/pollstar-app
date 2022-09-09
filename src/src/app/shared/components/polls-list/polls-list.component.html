@@ -1,3 +1,4 @@
+<app-loading *ngIf="isLoading"></app-loading>
 <div class="polls-list" *ngIf="sessionPolls">
   <div class="poll-list-item empty-state" *ngIf="sessionPolls.length === 0">
     <span translate="session.manage.polls.empty-state"></span>

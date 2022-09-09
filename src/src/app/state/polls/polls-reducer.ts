@@ -3,6 +3,7 @@ import {
   pollActivated,
   pollCreate,
   pollCreated,
+  pollList,
   pollListItemAdded,
   pollListOk,
   pollSelected,
@@ -32,9 +33,14 @@ const _pollsReducer = createReducer(
     isRefreshing: false,
     activePoll: poll,
   })),
+  on(pollList, (state, { id }) => ({
+    ...state,
+    isRefreshing: true,
+  })),
   on(pollListOk, (state, { polls }) => ({
     ...state,
     sessionPolls: polls,
+    isRefreshing: false,
   })),
   on(pollListItemAdded, (state, { poll }) =>
     sessionPollAddedHandler(state, poll)

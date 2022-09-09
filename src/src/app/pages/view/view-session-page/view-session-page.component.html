@@ -5,6 +5,7 @@
   <mat-icon color="success" *ngIf="isConnected">check_circle</mat-icon>
   <mat-icon color="warn" *ngIf="!isConnected">cancel</mat-icon>
 </mat-toolbar>
+<app-loading *ngIf="isLoading"></app-loading>
 <div class="poll-details" *ngIf="activeSession && activePoll">
   <mat-card>
     <mat-card-header>
@@ -35,7 +36,7 @@
       translate="session.view.empty-state.text"
     ></mat-card-content>
     <a
-      [routerLink]="['/sessions/manage/:id', activeSession.id]"
+      [routerLink]="['/sessions/manage/' + activeSession.id]"
       translate="session.view.empty-state.manage"
       *ngIf="activeSession.isOwner"
     ></a>

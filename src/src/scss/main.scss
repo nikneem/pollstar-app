@@ -44,3 +44,9 @@ a:hover {
   color: $bright;
   text-decoration: none;
 }
+.center-panel-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

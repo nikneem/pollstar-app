@@ -54,6 +54,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   public activeSession?: ISessionDetailsDto;
   public activePoll?: IPollDto;
   public isConnected: boolean = false;
+  public isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
@@ -155,6 +156,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
+        this.isLoading = val.isRefreshing;
         if (this.activeSession) {
           this.connectRealTimeService();
           this.store.dispatch(

@@ -17,6 +17,7 @@ export class PollsListComponent implements OnInit, OnDestroy {
   private sessionIdSubscription?: Subscription;
   private sessionPollsSubscription?: Subscription;
 
+  public isLoading: boolean = true;
   public sessionPolls?: Array<IPollsListItemDto>;
 
   constructor(private store: Store<IAppState>, private dialog: MatDialog) {}
@@ -40,13 +41,16 @@ export class PollsListComponent implements OnInit, OnDestroy {
       .subscribe((act) => {
         if (act) {
           this.sessionId = act.id;
-          this.refreshPollsList();
+          if (act.isOwner) {
+            this.refreshPollsList();
+          }
         }
       });
     this.sessionPollsSubscription = this.store
-      .select((str) => str.pollsState.sessionPolls)
+      .select((str) => str.pollsState)
       .subscribe((act) => {
-        this.sessionPolls = act;
+        this.isLoading = act.isRefreshing;
+        this.sessionPolls = act.sessionPolls;
       });
   }
   ngOnDestroy(): void {

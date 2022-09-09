@@ -8,10 +8,18 @@ import { PollsListComponent } from './polls-list/polls-list.component';
 import { PollListTileComponent } from './poll-list-tile/poll-list-tile.component';
 import { PollsDetailsDialogComponent } from './polls-details-dialog/polls-details-dialog.component';
 import { JoinSessionComponent } from './join-session/join-session.component';
+import { LoadingComponent } from './loading/loading.component';
 
 @NgModule({
-  declarations: [CreateSessionComponent, PollsListComponent, PollListTileComponent, PollsDetailsDialogComponent, JoinSessionComponent],
+  declarations: [
+    CreateSessionComponent,
+    PollsListComponent,
+    PollListTileComponent,
+    PollsDetailsDialogComponent,
+    JoinSessionComponent,
+    LoadingComponent,
+  ],
   imports: [CommonModule, TranslateModule, ReactiveFormsModule, MaterialModule],
-  exports: [PollsListComponent],
+  exports: [PollsListComponent, LoadingComponent],
 })
 export class ComponentsModule {}

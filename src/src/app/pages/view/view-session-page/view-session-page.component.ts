@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { IAppState } from 'src/app/state/app-state';
 import { IPollDto } from 'src/app/state/polls/polls-models';
 import { sessionGet, sessionJoin } from 'src/app/state/session/session-actions';
@@ -46,52 +46,19 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
   private sessionSubscription?: Subscription;
   private selectedPollSubscription?: Subscription;
   private graphSeriesSubscription?: Subscription;
+  private connectionCheckSubscription?: Subscription;
 
   private userId?: string;
   public sessionCode?: string;
   public activeSession?: ISessionDetailsDto;
   public activePoll?: IPollDto;
-
-  public eventsList: Array<string>;
-
-  @HostListener('window:blur', ['$event'])
-  handleWindowBlur(event: any) {
-    this.eventsList.push(
-      'window:blur -> ' + this.realtimeService.pubsubClient?.readyState
-    );
-  }
-  @HostListener('window:focus', ['$event'])
-  handleWindowFocus(event: any) {
-    this.connectRealTimeService();
-    this.eventsList.push(
-      'window:focus -> ' + this.realtimeService.pubsubClient?.readyState
-    );
-  }
-
-  @HostListener('document:visibilitychange', ['$event'])
-  visibilitychange() {
-    this.checkHiddenDocument();
-  }
-
-  checkHiddenDocument() {
-    if (document.hidden) {
-      this.eventsList.push(
-        'window:hidden -> ' + this.realtimeService.pubsubClient?.readyState
-      );
-    } else {
-      this.eventsList.push(
-        'window:visible -> ' + this.realtimeService.pubsubClient?.readyState
-      );
-    }
-  }
+  public isConnected: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private store: Store<IAppState>,
     private realtimeService: PubsubService
   ) {
-    this.eventsList = new Array<string>();
-    this.eventsList.push('events');
     this.chartOptions = {
       series: [],
       chart: {
@@ -138,7 +105,13 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
     }
   }
   connectRealTimeService() {
-    if (this.userId && this.activeSession) {
+    if (this.realtimeService.pubsubClient) {
+      this.isConnected =
+        this.realtimeService.pubsubClient.readyState ===
+        this.realtimeService.pubsubClient.OPEN;
+      console.log('connected, doing nothing');
+    }
+    if (!this.isConnected && this.userId && this.activeSession) {
       this.realtimeService.connect(this.activeSession.id, this.userId);
     }
   }
@@ -210,8 +183,14 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
           this.changeSeries(val);
         }
       });
+    this.connectionCheckSubscription = interval(1000).subscribe(() => {
+      this.connectRealTimeService();
+    });
   }
   ngOnDestroy(): void {
+    if (this.connectionCheckSubscription) {
+      this.connectionCheckSubscription.unsubscribe();
+    }
     if (this.sessionSubscription) {
       this.sessionSubscription.unsubscribe();
     }

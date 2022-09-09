@@ -1,11 +1,10 @@
 <mat-toolbar *ngIf="activeSession">
   {{ activeSession.name }}
   <span *ngIf="activePoll">&nbsp;&gt;&nbsp;{{ activePoll.name }} </span>
+  <span class="spacer"></span>
+  <mat-icon color="success" *ngIf="isConnected">check_circle</mat-icon>
+  <mat-icon color="warn" *ngIf="!isConnected">cancel</mat-icon>
 </mat-toolbar>
-<div class="events">
-  <p *ngFor="let evt of eventsList">{{ evt }}</p>
-</div>
-
 <div class="poll-details" *ngIf="activeSession && activePoll">
   <mat-card>
     <mat-card-header>

@@ -21,7 +21,7 @@ export interface IRealtimeEvent<TPayload> {
   providedIn: 'root',
 })
 export class PubsubService {
-  private pubsubClient?: WebSocket;
+  public pubsubClient?: WebSocket;
   private sessionId?: string;
 
   constructor(private http: HttpClient, private store: Store<IAppState>) {}

@@ -56,11 +56,15 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
 
   @HostListener('window:blur', ['$event'])
   handleWindowBlur(event: any) {
-    this.eventsList.push('window:blur');
+    this.eventsList.push(
+      'window:blur -> ' + this.realtimeService.pubsubClient?.readyState
+    );
   }
   @HostListener('window:focus', ['$event'])
   handleWindowFocus(event: any) {
-    this.eventsList.push('window:focus');
+    this.eventsList.push(
+      'window:focus -> ' + this.realtimeService.pubsubClient?.readyState
+    );
   }
 
   @HostListener('document:visibilitychange', ['$event'])
@@ -70,9 +74,13 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
 
   checkHiddenDocument() {
     if (document.hidden) {
-      this.eventsList.push('window:hidden');
+      this.eventsList.push(
+        'window:hidden -> ' + this.realtimeService.pubsubClient?.readyState
+      );
     } else {
-      this.eventsList.push('window:visible');
+      this.eventsList.push(
+        'window:visible -> ' + this.realtimeService.pubsubClient?.readyState
+      );
     }
   }
 

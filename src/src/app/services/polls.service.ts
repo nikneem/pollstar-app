@@ -25,6 +25,10 @@ export class PollsService {
     const url = `${this.backendUrl}/polls/${id}`;
     return this.http.get<IPollDto>(url);
   }
+  public getActive(sessionId: string): Observable<IPollDto> {
+    const url = `${this.backendUrl}/polls/${sessionId}/active`;
+    return this.http.get<IPollDto>(url);
+  }
   public post(poll: ICreatePollDto): Observable<IPollDto> {
     const url = `${this.backendUrl}/polls`;
     return this.http.post<IPollDto>(url, poll);

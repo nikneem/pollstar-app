@@ -9,6 +9,7 @@ import {
   pollCreate,
   pollCreated,
   pollFailure,
+  pollGetActive,
   pollList,
   pollListItemAdded,
   pollListOk,
@@ -82,6 +83,20 @@ export class PollsEffects {
       mergeMap((act) =>
         this.pollsService.get(act.id).pipe(
           map((dto) => pollSelected({ poll: dto })),
+          catchError(() => {
+            return of(pollFailure());
+          })
+        )
+      )
+    )
+  );
+
+  pollGetActiveEffect$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(pollGetActive),
+      mergeMap((act) =>
+        this.pollsService.getActive(act.sessionId).pipe(
+          map((dto) => pollActivated({ poll: dto })),
           catchError(() => {
             return of(pollFailure());
           })

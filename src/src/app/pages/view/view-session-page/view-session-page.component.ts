@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 import { voteCast, voteGetList } from 'src/app/state/votes/votes-actions';
 import { IPollVoteDto } from 'src/app/state/votes/votes-models';
 import { debounceTime } from 'rxjs/operators';
+import { pollGetActive } from 'src/app/state/polls/polls-actions';
 
 export type ChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -109,7 +110,6 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       this.isConnected =
         this.realtimeService.pubsubClient.readyState ===
         this.realtimeService.pubsubClient.OPEN;
-      console.log('connected, doing nothing');
     }
     if (!this.isConnected && this.userId && this.activeSession) {
       this.realtimeService.connect(this.activeSession.id, this.userId);
@@ -155,7 +155,12 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
       .select((x) => x.sessionState)
       .subscribe((val) => {
         this.activeSession = val.activeSession;
-        this.connectRealTimeService();
+        if (this.activeSession) {
+          this.connectRealTimeService();
+          this.store.dispatch(
+            pollGetActive({ sessionId: this.activeSession.id })
+          );
+        }
       });
 
     this.selectedPollSubscription = this.store
@@ -183,7 +188,7 @@ export class ViewSessionPageComponent implements OnInit, OnDestroy {
           this.changeSeries(val);
         }
       });
-    this.connectionCheckSubscription = interval(1000).subscribe(() => {
+    this.connectionCheckSubscription = interval(2500).subscribe(() => {
       this.connectRealTimeService();
     });
   }

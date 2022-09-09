@@ -26,7 +26,10 @@ export const pollUpdated = createAction(
   '[Polls] Updated',
   props<{ dto: IPollDto }>()
 );
-
+export const pollGetActive = createAction(
+  '[Polls] Get active',
+  props<{ sessionId: string }>()
+);
 export const pollSelect = createAction(
   '[Polls] Select',
   props<{ id: string }>()

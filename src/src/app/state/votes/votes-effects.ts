@@ -37,7 +37,7 @@ export class VotesEffects {
   voteCastEffect$ = createEffect(() =>
     this.actions$.pipe(
       ofType(voteCast),
-      debounceTime(500),
+      debounceTime(50),
       mergeMap((act) =>
         this.votesService.post(act.dto).pipe(
           map((dto) => votesListUpdated({ dto: dto })),
